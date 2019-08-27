@@ -11,6 +11,15 @@ app.get("/getall", async (req, res) => {
   }
 });
 
+//query for a single latest data entry
+app.get("/getlatest", async (req, res) => {
+  const labo = await laboModel.findOne({}, {}, { sort: { createdAt: -1 } });
+  try {
+    res.send(labo);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
 app.post("/insert", async (req, res) => {
   const labo = new laboModel(req.body);
   try {

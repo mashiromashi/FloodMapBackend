@@ -11,6 +11,20 @@ app.get("/getall", async (req, res) => {
   }
 });
 
+//query for a single latest data entry
+app.get("/getlatest", async (req, res) => {
+  const batasan = await batasanModel.findOne(
+    {},
+    {},
+    { sort: { createdAt: -1 } }
+  );
+  try {
+    res.send(batasan);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 app.post("/insert", async (req, res) => {
   const batasan = new batasanModel(req.body);
   try {
