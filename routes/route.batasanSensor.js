@@ -29,7 +29,7 @@ app.post("/insert", async (req, res) => {
   const batasan = new batasanModel(req.body);
   try {
     await batasan.save();
-    res.send(batasan);
+    res.status(201).send(batasan);
   } catch (err) {
     res.status(500).send(err);
   }
