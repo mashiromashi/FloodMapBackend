@@ -23,23 +23,44 @@ app.get("/getlatest", async (req, res) => {
   }
 });
 
-// //query for monthly statistics
-// app.get("/monthly?q=:inputMonth", async (req, res) => {
-//   let currentMomentMonth = moment().month();
-//   let currentMonth = monthArray[currentMomentMonth];
+//query for monthly statistics
+app.get("/monthly/q=:inputMonth", async (req, res) => {
+  const input = req.params.inputMonth;
+  const monthly = await laboModel.find({
+    $text: {
+      $search: input
+    }
+  });
+  if (monthly) {
+    try {
+      res.status(200).send(monthly);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  }
+});
 
-//   const inputMonth = req.params.input
-//   const monthly = await laboModel.find({
-//     $text: {
-//       $search: inputMonth
-//     }
-//   });
-//   if (monthly) {
-//     try {
-//       res.status(200).send
-//     }
-//   }
-// });
+//query for weekly statistics
+app.get("/weekly", async (req, res) => {
+  const month = monthArray[moment(new Date()).month()];
+  const day = moment(new Date()).date();
+  const today = `${day}-${month}`;
+  const lastWeek = `${day - 7}-${month}`;
+  // const today = moment().startOf("day");
+  const weekly = await laboModel.find({
+    createdAt: {
+      $gte: lastWeek,
+      $lte: today
+    }
+  });
+  if (weekly) {
+    try {
+      res.status(200).send(weekly);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  }
+});
 
 app.post("/insert", async (req, res) => {
   const labo = new laboModel(req.body);

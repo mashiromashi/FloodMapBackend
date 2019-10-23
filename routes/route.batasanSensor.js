@@ -35,4 +35,43 @@ app.post("/insert", async (req, res) => {
   }
 });
 
+//query for monthly statistics
+app.get("/monthly/q=:inputMonth", async (req, res) => {
+  const input = req.params.inputMonth;
+  const monthly = await batasanModel.find({
+    $text: {
+      $search: input
+    }
+  });
+  if (monthly) {
+    try {
+      res.status(200).send(monthly);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  }
+});
+
+//query for weekly statistics
+app.get("/weekly", async (req, res) => {
+  const month = monthArray[moment(new Date()).month()];
+  const day = moment(new Date()).date();
+  const today = `${day}-${month}`;
+  const lastWeek = `${day - 7}-${month}`;
+  // const today = moment().startOf("day");
+  const weekly = await batasanModel.find({
+    createdAt: {
+      $gte: lastWeek,
+      $lte: today
+    }
+  });
+  if (weekly) {
+    try {
+      res.status(200).send(weekly);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  }
+});
+
 module.exports = app;
