@@ -1,6 +1,23 @@
 const mongoose = require("mongoose");
-const floodMapSchema = require("../db/schema");
+const moment = require("moment");
 
-let batasanSensor = mongoose.model("batasanSensor", floodMapSchema, "Batasan");
+const DateTime = () => moment(new Date()).format("DD-MMM-YYYY_hh:mm:ss");
+
+const batasanSchema = new mongoose.Schema({
+  waterLevel: {
+    type: mongoose.Decimal128
+  },
+  rainLevel: {
+    type: mongoose.Decimal128
+  },
+  createdAt: {
+    type: String,
+    default: DateTime,
+    index: true,
+    text: true
+  }
+});
+
+const batasanSensor = mongoose.model("batasanSensor", batasanSchema, "Batasan");
 
 module.exports = batasanSensor;
