@@ -16,7 +16,7 @@ var app = express();
 //connecting to mongodb
 mongoose.connect(
   "mongodb+srv://Mashi:mashi@cluster0-7bqyb.gcp.mongodb.net/floodMap?retryWrites=true&w=majority",
-  { useNewUrlParser: true }
+  { useNewUrlParser: true, useCreateIndex: true }
 );
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
