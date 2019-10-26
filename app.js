@@ -14,10 +14,10 @@ const laboRouter = require("./routes/route.laboSensor");
 var app = express();
 
 //connecting to mongodb
-mongoose.connect(
-  "mongodb+srv://Mashi:mashi@cluster0-7bqyb.gcp.mongodb.net/floodMap?retryWrites=true&w=majority",
-  { useNewUrlParser: true, useCreateIndex: true }
-);
+mongoose.connect(process.env.MONGO_CONNECT, {
+  useNewUrlParser: true,
+  useCreateIndex: true
+});
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", function() {
