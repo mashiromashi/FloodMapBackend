@@ -62,6 +62,7 @@ app.get("/weekly", async (req, res) => {
   }
 });
 
+
 app.post("/insert", async (req, res) => {
   const labo = new laboModel(req.body);
   try {
@@ -71,5 +72,28 @@ app.post("/insert", async (req, res) => {
     res.status(500).send(err);
   }
 });
+
+
+app.get("/current", async(req,res)=>{
+  const day = moment(new Date()).date().toString();
+  const month = monthArray[moment(new Date()).month()];
+  const year = moment(new Date()).year()
+  const start = moment(new Date()).set({ hour:0, minute:0, second:0 }).format("HH:mm:ss");
+  const end = moment(new Date()).set({ hour:23, minute:59, second:59 }).format("HH:mm:ss");
+
+  const current = await laboModel.find({
+    createdAt:{
+      $gte: `${day}-${month}-${year}_${start}`,
+      $lte: `${day}-${month}-${year}_${end}`
+    }
+  })
+  if (current) {
+    try {
+      res.status(200).send(current)
+    } catch (err) {
+      res.status(500).send(err)
+    }
+  }
+})
 
 module.exports = app;

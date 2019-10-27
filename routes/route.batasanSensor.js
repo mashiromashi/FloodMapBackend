@@ -1,6 +1,8 @@
 const express = require("express");
 const batasanModel = require("../models/model.batasanSensor");
 const app = express();
+const monthArray = require("../util/months")
+const moment = require('moment')
 
 app.get("/getall", async (req, res) => {
   const batasan = await batasanModel.find({});
@@ -73,5 +75,27 @@ app.get("/weekly", async (req, res) => {
     }
   }
 });
+
+app.get("/current", async(req,res)=>{
+  const day = moment(new Date()).date().toString();
+  const month = monthArray[moment(new Date()).month()];
+  const year = moment(new Date()).year()
+  const start = moment(new Date()).set({ hour:0, minute:0, second:0 }).format("HH:mm:ss");
+  const end = moment(new Date()).set({ hour:23, minute:59, second:59 }).format("HH:mm:ss");
+
+  const current = await batasanModel.find({
+    createdAt:{
+      $gte: `${day}-${month}-${year}_${start}`,
+      $lte: `${day}-${month}-${year}_${end}`
+    }
+  })
+  if (current) {
+    try {
+      res.status(200).send(current)
+    } catch (err) {
+      res.status(500).send(err)
+    }
+  }
+})
 
 module.exports = app;
