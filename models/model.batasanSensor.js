@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const moment = require("moment");
 
-const DateTime = () => moment(new Date()).format("DD-MMM-YYYY_hh:mm:ss");
+const DateTime = () => moment(new Date()).format("DD-MMM-YYYY_HH:mm:ss");
 
 const batasanSchema = new mongoose.Schema({
   waterLevel: {
