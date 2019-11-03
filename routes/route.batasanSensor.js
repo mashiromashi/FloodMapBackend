@@ -18,7 +18,7 @@ app.get("/getlatest", async (req, res) => {
   const batasan = await batasanModel.findOne(
     {},
     {},
-    { sort: { createdAt: -1 } }
+    { sort: { _id : -1 } }
   );
   try {
     res.send(batasan);

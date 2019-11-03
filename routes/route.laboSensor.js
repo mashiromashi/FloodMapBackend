@@ -15,7 +15,7 @@ app.get("/getall", async (req, res) => {
 
 //query for a single latest data entry
 app.get("/getlatest", async (req, res) => {
-  const labo = await laboModel.findOne({}, {}, { sort: { createdAt: -1 } });
+  const labo = await laboModel.findOne({}, {}, { sort: { _id: -1 } });
   try {
     res.send(labo);
   } catch (err) {
